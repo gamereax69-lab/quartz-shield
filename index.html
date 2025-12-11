@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberSentinel – Password Generator</title>
+
+<style>
+/* ---------------- GLOBAL ---------------- */
+:root {
+  --bg: #ffffff;
+  --text: #0a0a0a;
+  --card: #f4f4f7;
+  --accent: #3a68ff;
+}
+
+body.night {
+  --bg: #0c0f14;
+  --text: #ffffff;
+  --card: #161b24;
+  --accent: #5a8bff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.3s ease;
+}
+
+/* ---------------- NAVBAR ---------------- */
+nav {
+  width: 100%;
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav .logo {
+  font-size: 26px;
+  font-weight: 700;
+  position: relative;
+  cursor: pointer;
+}
+
+nav .logo:hover {
+  color: var(--accent);
+  transition: 0.3s;
+}
+
+nav ul {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  position: relative;
+  padding-bottom: 4px;
+  transition: 0.25s ease;
+}
+
+nav ul li a:hover {
+  color: var(--accent);
+}
+
+nav ul li a::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background: var(--accent);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transition: 0.3s;
+}
+
+nav ul li a:hover::after {
+  width: 100%;
+}
+
+/* Night/Day toggle icon */
+.toggle-icon {
+  width: 28px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.toggle-icon:hover {
+  transform: scale(1.15);
+}
+
+/* ---------------- HERO LAYOUT --------------- */
+.hero {
+  display: flex;
+  padding: 40px 60px;
+  gap: 60px;
+}
+
+.left-side {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.left-side h1 {
+  font-size: 55px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.left-side p {
+  margin-top: 20px;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* ---------------- CARD ---------------- */
+.generator-card {
+  flex: 1;
+  background: var(--card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.07);
+  transition: 0.3s ease;
+}
+
+.generator-card h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: #ffffff;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  background: #2a52d6;
+}
+
+/* ---------------- ABOUT SECTION ---------------- */
+.about {
+  padding: 80px 60px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.about h2 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.about p {
+  font-size: 18px;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+/* ---------------- PROMO SECTIONS ---------------- */
+.promo-section {
+  width: 100%;
+  padding: 60px 60px;
+  background: var(--card);
+  margin-top: 50px;
+}
+
+.promo-section h2 {
+  font-size: 32px;
+}
+
+.promo-box {
+  margin-top: 20px;
+  padding: 25px;
+  background: var(--bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* ---------------- FOOTER ---------------- */
+footer {
+  margin-top: 80px;
+  text-align: center;
+  padding: 30px;
+  opacity: 0.7;
+  font-size: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">CyberSentinel</div>
+
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#generator">Generator</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#promo">Promotions</a></li>
+  </ul>
+
+  <img src="https://img.icons8.com/ios-filled/50/moon-symbol.png" class="toggle-icon" id="modeToggle">
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="left-side">
+    <h1>Generate Strong, Secure Passwords Instantly</h1>
+    <p>
+      CyberSentinel helps you protect your digital identity with safe, unpredictable,
+      military-grade password generation — inspired by the simplicity and clarity of 1Password’s design.
+    </p>
+  </div>
+
+  <div class="generator-card" id="generator">
+    <h2>Password Generator</h2>
+
+    <input type="text" id="output" placeholder="Generated password appears here..." readonly>
+
+    <label>Length (per word or characters):</label>
+    <input type="number" id="length" min="4" max="50" value="12">
+
+    <label>Mode:</label>
+    <select id="mode">
+      <option value="letters">Letters only</option>
+      <option value="words">Words mode</option>
+      <option value="numbers">Numbers only</option>
+      <option value="mixed">Mixed (recommended)</option>
+    </select>
+
+    <button onclick="generatePass()">Generate</button>
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="about" id="about">
+  <h2>About CyberSentinel</h2>
+  <p>
+    CyberSentinel is built with one goal — to bring powerful online security tools to everyone,
+    without unnecessary complexity. We focus on clear design, fast performance,
+    and advanced protection against digital threats.
+    <br><br>
+    Our password generator is built on modern cryptographic randomness, ensuring every generated
+    password is unique, secure, and practically impossible to guess. Whether you're securing your
+    accounts, devices, apps, or confidential files, CyberSentinel ensures your data stays in your hands only.
+  </p>
+</section>
+
+<!-- PROMOTIONAL SECTIONS -->
+<section class="promo-section" id="promo">
+  <h2>Why CyberSentinel?</h2>
+
+  <div class="promo-box">
+    <h3>Smart Protection</h3>
+    <p>CyberSentinel scans, analyses, and protects your online identity from exposure.</p>
+  </div>
+
+  <div class="promo-box">
+    <h3>Future-Ready Security</h3>
+    <p>Powered by AI, constant updates, and modern encryption practices.</p>
+  </div>
+
+  <div class="promo-box">
+    <h3>Lightning Fast</h3>
+    <p>Generate secure passwords in milliseconds — no lag, no complications.</p>
+  </div>
+</section>
+
+<footer>
+  © 2025 CyberSentinel. All Rights Reserved.
+</footer>
+
+<script>
+/* ---------------- NIGHT/DAY MODE ---------------- */
+document.getElementById("modeToggle").onclick = function () {
+  document.body.classList.toggle("night");
+};
+
+/* ---------------- PASSWORD GENERATOR ---------------- */
+function generatePass() {
+  let length = document.getElementById("length").value;
+  let mode = document.getElementById("mode").value;
+
+  let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let numbers = "0123456789";
+  let words = ["shadow", "delta", "quantum", "flare", "matrix", "sentinel", "nova", "strike", "pulse", "core"];
+
+  let output = "";
+
+  if (mode === "letters") {
+    for (let i = 0; i < length; i++)
+      output += letters[Math.floor(Math.random() * letters.length)];
+  }
+
+  if (mode === "numbers") {
+    for (let i = 0; i < length; i++)
+      output += numbers[Math.floor(Math.random() * numbers.length)];
+  }
+
+  if (mode === "mixed") {
+    let chars = letters + numbers;
+    for (let i = 0; i < length; i++)
+      output += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  if (mode === "words") {
+    output = "";
+    for (let i = 0; i < Math.floor(length); i++) {
+      output += words[Math.floor(Math.random() * words.length)] + "-";
+    }
+    output = output.slice(0, -1);
+  }
+
+  document.getElementById("output").value = output;
+}
+</script>
+
+</body>
+</html>
